@@ -15,5 +15,6 @@ services:
     volumes:
       - ./development/.ivy2:/root/.ivy2
       - ./development/.cache:/root/.cache
+      - ./development/.sbt:/root/.sbt
       - ./development/.vscode-server:/root/.vscode-server
       - ./development/hello:/root/hello

@@ -80,13 +80,13 @@ The authentication example here is very naive, and user 'guest' with password 'p
 
 # `ianz`
 
-This example shows a very basic example of a containerised static website rendered using [Twirl templates](https://www.playframework.com/documentation/2.8.x/ScalaTemplates) via [Play Framework](https://www.playframework.com/).  The website parses files found in a subfolder on start-up, and so can be redeployed with different sets of inputs.
+This example shows a very basic example of a containerised static website rendered using [Twirl templates](https://www.playframework.com/documentation/2.8.x/ScalaTemplates) via [Play Framework](https://www.playframework.com/).  We parse files found in a subfolder on start-up, and so several instances of the image can be redeployed with different sets of inputs.
 
 ![](img/ianz.png)
 
 # `dashboard`
 
-This example shows a very basic of a containerised R Shiny application.  The specific example here is [Stats NZ Data Portal](https://github.com/StatisticsNZ/data_portal).  The application reads a configuration on start-up, so, like the `ianz` example, can be redeployed with different sets of inputs.
+This example demonstrates the containerisation of an R Shiny application.  The specific example here is [Stats NZ Data Portal](https://github.com/StatisticsNZ/data_portal).  The application reads a configuration on start-up, so, like the `ianz` example, can be redeployed with different sets of inputs.
 
 ![](img/dashboard.png)
 
