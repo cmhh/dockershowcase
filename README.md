@@ -27,7 +27,7 @@ Of course, the is just an example, and in a real-world setting you would likely 
 
 # `seasadj`
 
-This example demonstrates deployment of a simple web services.  In this case, the service is a stateless (results are briefly saved to disk in `/tmp`, but then deleted) wrapper around [X13-ARIMA-SEATS](https://www.census.gov/data/software/x13as.html).  The example also includes a naive implementation of a side-car proxy (via [envoy](https://www.envoyproxy.io/)) to demonstrate how one might go about authentication (via [Open Policy Agent](https://www.openpolicyagent.org/)) using entirely open source components.
+This example demonstrates deployment of a simple web service.  In this case, the service is a stateless (results are briefly saved to disk in `/tmp`, but then deleted) wrapper around [X13-ARIMA-SEATS](https://www.census.gov/data/software/x13as.html).  The example also includes a naive implementation of a side-car proxy (via [envoy](https://www.envoyproxy.io/)) to demonstrate how one might go about authentication (via [Open Policy Agent](https://www.openpolicyagent.org/)) using entirely open source components.
 
 ![](img/seasadjproxy.png)
 
@@ -86,7 +86,7 @@ This example shows a very basic example of a containerised static website render
 
 # `dashboard`
 
-This example shows a very basic of a containerised R Shiny application.  The specific example here is [Stasts NZ Data Portal](https://github.com/StatisticsNZ/data_portal).  The application reads a configuration on start-up, so, like the `ianz` example, can be redeployed with different sets of inputs.
+This example shows a very basic of a containerised R Shiny application.  The specific example here is [Stats NZ Data Portal](https://github.com/StatisticsNZ/data_portal).  The application reads a configuration on start-up, so, like the `ianz` example, can be redeployed with different sets of inputs.
 
 ![](img/dashboard.png)
 
