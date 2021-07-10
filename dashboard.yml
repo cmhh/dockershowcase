@@ -1,0 +1,28 @@
+version: "3.8"
+services:
+  dashboard1:
+    image: dashboard
+    build:
+      context: ./
+      dockerfile: dashboard/Dockerfile
+      args:
+        - cores=6
+    ports:
+      - 3001:3000
+    volumes:
+      - ./dashboard/examples/ex1/config:/data_portal/config
+      - ./dashboard/examples/ex1/data:/data_portal/data 
+      - ./dashboard/examples/ex1/www:/data_portal/www
+  dashboard2:
+    image: dashboard
+    build:
+      context: ./
+      dockerfile: dashboard/Dockerfile
+      args:
+        - cores=6
+    ports:
+      - 3002:3000
+    volumes:
+      - ./dashboard/examples/ex2/config:/data_portal/config
+      - ./dashboard/examples/ex2/data:/data_portal/data 
+      - ./dashboard/examples/ex2/www:/data_portal/www

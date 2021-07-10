@@ -1,0 +1,19 @@
+version: "3.8"
+services:
+  development:
+    image: development
+    build:
+      context: ./
+      dockerfile: development/Dockerfile
+    ports:
+      - "23:22"
+      - 9000:9000
+      - 9001:9001
+    environment:
+      - "PUB_KEY=${PUB_KEY}" 
+      - "PRIVATE_KEY=${PRIVATE_KEY}"
+    volumes:
+      - ./development/.ivy2:/root/.ivy2
+      - ./development/.cache:/root/.cache
+      - ./development/.vscode-server:/root/.vscode-server
+      - ./development/hello:/root/hello

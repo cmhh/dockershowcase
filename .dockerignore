@@ -1,0 +1,16 @@
+**/img
+**/README.md
+**/.access^
+**/.local
+**/.vscode-server
+**/.cache
+**/node_modules
+**/.npm
+**/registry-data
+**/.ivy2
+**/.sbt
+**/.Rproj.user
+**/.Rhistory
+**/.RData
+**/.env
+**/model

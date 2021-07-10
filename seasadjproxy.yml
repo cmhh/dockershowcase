@@ -1,0 +1,32 @@
+version: "3.8"
+services:
+  envoy:
+    image: envoyproxy/envoy:v1.18-latest
+    ports:
+      - "8800:8800"
+      - "8081:8081"
+    volumes:
+      - ./seasadj/envoy.yml:/etc/envoy/envoy.yaml
+  opa:
+    image: openpolicyagent/opa:latest-istio
+    volumes:
+      - ./seasadj/policy.rego:/etc/policy.rego
+    command:
+    - run
+    - --log-level=debug
+    - --server
+    - --log-format=json-pretty
+    - --set=plugins.envoy_ext_authz_grpc.addr=:9191
+    - --set=decision_logs.console=true
+    - /etc/policy.rego
+  seasadj:
+    image: seasadj
+    build:
+      context: ./
+      dockerfile: seasadj/Dockerfile
+      args: 
+        - seasadj_version=0.2.0
+        - cores=6
+    ports:
+      - 9004:9001
+    tty: true

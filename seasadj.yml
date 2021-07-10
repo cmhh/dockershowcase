@@ -1,0 +1,13 @@
+version: "3.8"
+services:
+  seasadj:
+    image: seasadj
+    build:
+      context: ./
+      dockerfile: seasadj/Dockerfile
+      args: 
+        - seasadj_version=0.2.0
+        - cores=6
+    ports:
+      - 9003:9001
+    tty: true

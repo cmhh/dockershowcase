@@ -1,0 +1,31 @@
+version: "3.8"
+services:
+  database:
+    image: adventureworks
+    build:
+      context: ./
+      dockerfile: adventureworks/Dockerfile
+    ports:
+      - 1433:1433
+    environment:
+      - ACCEPT_EULA=Y
+      - "MSSQL_SA_PASSWORD=password-1234"
+    networks:
+      - dbnet 
+  rstudio:
+    image: rstudio:4.1.0
+    build:
+      context: ./
+      dockerfile: rstudio/Dockerfile
+      args:
+        r_version: 4.1.0
+        rstudio_version: 1.4.1717
+    ports:
+      - 8788:8787
+    volumes:
+      - ./rstudio/.local:/home/guest/.local
+      - ./rstudio/work:/home/guest/work
+    networks:
+      - dbnet
+networks:
+  dbnet:

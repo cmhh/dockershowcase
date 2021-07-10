@@ -1,0 +1,12 @@
+version: "3.8"
+services:
+  resnet:
+    image: resnet
+    build:
+      context: ./
+      dockerfile: resnet/Dockerfile
+    ports:
+      - 5000:5000
+    volumes:
+      - ./resnet/model:/app/model
+    tty: true

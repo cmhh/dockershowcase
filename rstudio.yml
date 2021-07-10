@@ -1,0 +1,15 @@
+version: "3.8"
+services:
+  rstudio:
+    image: rstudio:4.1.0
+    build:
+      context: ./
+      dockerfile: rstudio/Dockerfile
+      args:
+        r_version: 4.1.0
+        rstudio_version: 1.4.1717
+    ports:
+      - 8788:8787
+    volumes:
+      - ./rstudio/.local:/home/guest/.local
+      - ./rstudio/work:/home/guest/work

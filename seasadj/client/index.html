@@ -1,0 +1,251 @@
+<html>
+    <head>
+        <title>seasadj</title>
+        <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script src="https://code.highcharts.com/highcharts.src.js"></script>
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.0/styles/atom-one-light.min.css">  
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/rangy/1.3.0/rangy-core.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/rangy/1.3.0/rangy-textrange.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/rangy/1.3.0/rangy-selectionsaverestore.min.js"></script>
+        <style>
+            * {
+                padding: 0;
+                margin: 0;
+            }
+
+            pre > code {
+              height: 400px;
+              font-size: 90%;
+            }
+
+            body {
+                font-family: Arial, Helvetica, sans-serif;
+            }
+          
+            header {
+                background-color: #666;
+                padding: 20px;
+                text-align: center;
+                font-size: 110%;
+                color: white;
+            }
+            
+            footer {
+                background-color: #777;
+                padding: 20px;
+                text-align: center;
+                color: white;
+            }
+
+            #container {
+                width: 100%;
+                background-color: #EEEEEE;
+            }
+
+            #content {
+                max-width: 900px;
+                margin-left: auto;
+                margin-right: auto;
+                background-color: #FFFFFF;
+                padding: 10px;
+            }
+
+            #spec {
+                padding: 5px;
+                margin: 0;
+                width: calc(100% - 10px);
+                max-width: 100%;
+                height: 400px;
+                font-size: 90%;
+                resize: none;
+                outline: none;
+                overflow-x: none;
+            }
+
+            #input {
+                display: inline-block; 
+                width: 40%;
+                margin-left: auto;
+                margin-right: auto;
+                overflow-x: none!important;
+                overflow-y: none!important;
+            }
+
+            #result {
+                display: inline-block;
+                width: calc(60% - 10px);
+                height: 400px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            @media (max-width: 900px) {
+                #input, #result {
+                  display: block;
+                  width: 100%;
+                }
+
+                #spec {
+                  height: 260px;
+                }
+            }
+
+            #adjust {
+                box-shadow:inset 0px 1px 3px 0px #91b8b3;
+                background: linear-gradient(to bottom, #768d87 5%, #6c7c7c 100%);
+                background-color: #768d87;
+                border-radius: 3px;
+                border: 1px solid #566963;
+                display: inline-block;
+                cursor: pointer;
+                color: #ffffff;
+                font-family:Arial;
+                font-size: 85%;
+                font-weight: bold;
+                padding:5px 8px;
+                text-decoration: none;
+                text-shadow: 0px -1px 0px #2b665e;
+                margin-top: 8px;
+            }
+
+            #adjust:hover {
+                background:linear-gradient(to bottom, #6c7c7c 5%, #768d87 100%);
+                background-color:#6c7c7c;
+            }
+
+            #adjust:active {
+                position:relative;
+                top:1px;
+            }
+        </style>
+    </head>
+    <body>
+        <header><h2>Seasonal Adjustment as a Service</h2></header>
+        <div id="app"></div>
+        <footer>&copy;2020 cmhh</footer>
+        <script>
+        Vue.component('seasadjchart', {
+          props: {
+            name: {required: true},
+            tsdata: {required: true}
+          },
+          mounted() {
+            this.$_update(this.code);
+          },
+          watch: {
+            tsdata() {
+              Highcharts.chart(this.name, {
+                title: {
+                    text: this.tsdata.diagnostics.srstit,
+                    useHTML: true
+                },
+                yAxis: {
+                    title: {
+                        text: ""
+                    }
+                },
+                xAxis: {
+                  categories: this.tsdata.period
+                },
+                series: [
+                  {
+                    name: "unadjusted",
+                    data: this.tsdata.ori
+                  },
+                  {
+                    name: "seasonally adjusted",
+                    data: this.tsdata.sa
+                  },
+                  {
+                    name: "trend",
+                    data: this.tsdata.trn
+                  }
+                ],
+                chart: {
+                  type: 'line',
+                  zoomType: 'xy',
+                  height: null
+                },
+                plotOptions: {
+                  series: {
+                    allowPointSelect: true,
+                    marker: {
+                      enabled: false
+                    }
+                  }
+                }
+              });
+            }
+          },
+          methods: {
+            $_update(seriesCode) {
+            }
+          },
+          template: `<div class="seasadjchart" v-bind:id="name"></div>`
+        });
+        </script>
+        <script>
+            let app = new Vue({
+                el: '#app',
+                data: {
+                    res: []
+                },
+                methods: {
+                    highlight() {
+                        let ss = rangy.saveSelection()
+                        let el = document.getElementById("spec2")
+                        hljs.highlightBlock(el)
+                        rangy.restoreSelection(ss)
+                    },
+                    doAdjust(){
+                        let context = this                        
+                        axios
+                            .post("http://localhost:9001/seasadj/adjust?save=ori,sa,trn", document.getElementById("spec").textContent)
+                            .then(response => {
+                                let res = response.data;
+                                let key = Object.keys(res)[0]
+                                context.res = {
+                                    period:res[key].series.ori.date,
+                                    ori:res[key].series.ori.value,
+                                    sa:res[key].series.sa.value,
+                                    trn:res[key].series.trn.value,
+                                    diagnostics:res[key].diagnostics
+                                };
+                            });
+                    }
+                },
+                template:`
+                    <div id=container><div id=content>
+                        <div id=input>
+                            <pre><code id=spec class="json" contenteditable="true" v-on:keyup="highlight" data-trim>{
+  "ap": {
+    "series": {
+      "title": "Air Passengers",
+      "start": 1958.01,
+      "data": [
+        340.0, 318.0, 362.0, 348.0, 363.0, 435.0, 
+        491.0, 505.0, 404.0, 359.0, 310.0, 337.0, 
+        360.0, 342.0, 406.0, 396.0, 420.0, 472.0, 
+        548.0, 559.0, 463.0, 407.0, 362.0, 405.0, 
+        417.0, 391.0, 419.0, 461.0, 472.0, 535.0, 
+        622.0, 606.0, 508.0, 461.0, 390.0, 432.0
+      ]
+    },
+    "x11": null
+  }
+}</code></pre>
+                            <button type="button" @click="doAdjust" id=adjust>Adjust</button>
+                        </div>
+                        <div id=result>
+                            <seasadjchart v-bind:tsdata="res" name=seasadjres></seasadjchart>
+                        </div>
+                    </div></div>
+                `
+            })
+        </script>
+
+        <script>hljs.initHighlightingOnLoad();</script>
+    </body>
+</html>

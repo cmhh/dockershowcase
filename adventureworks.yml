@@ -1,0 +1,12 @@
+version: "3.8"
+services:
+  database:
+    image: adventureworks
+    build:
+      context: ./
+      dockerfile: adventureworks/Dockerfile
+    ports:
+      - 1433:1433
+    environment:
+      - ACCEPT_EULA=Y
+      - "MSSQL_SA_PASSWORD=password-1234"
