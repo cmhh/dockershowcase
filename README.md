@@ -31,7 +31,7 @@ This example demonstrates deployment of a simple web service.  In this case, the
 
 ![](img/seasadjproxy.png)
 
-The `seasadj` directory contains a simple JSON input as [](seasadj/airpassengers.json), which looks as follows:
+The `seasadj` directory contains a simple JSON input, [airpassengers.json](seasadj/airpassengers.json), which looks as follows:
 
 ```json
 {
